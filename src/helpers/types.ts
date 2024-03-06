@@ -13,11 +13,7 @@ type NFT_RESPONSE = {
     }[]
 }
 
-type EVM_ADDRESSES = {
-    sucess: boolean,
-    total_count: number,
-    addresses: string[]
-}
+type EVM_ADDRESSES = string[];
 
 type DATA = {
     sucess: boolean,
@@ -28,7 +24,7 @@ type DATA = {
 
 type State = {
     count: number,
-    nfts: string[]
+    data: DATA
 }
 
 export type { NFTS, NFT_RESPONSE, EVM_ADDRESSES, State, DATA }

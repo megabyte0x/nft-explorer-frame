@@ -1,8 +1,8 @@
 import { NFTS } from './types';
-import { NFT_CONTRACT } from './constants';
+import { NFT_CONTRACT, ALCHEMY_API_KEY } from './constants';
 
 const options = { method: 'GET', headers: { accept: 'application/json' } };
-const API_KEY: string = process.env.ALCHEMY_API_KEY ? process.env.ALCHEMY_API_KEY : '';
+// const API_KEY: string = process.env.ALCHEMY_API_KEY ? process.env.ALCHEMY_API_KEY : '';
 
 async function getNFTs(user_address: string, button_value: string): Promise<NFTS> {
     let contract_address: string;
@@ -25,7 +25,7 @@ async function getNFTs(user_address: string, button_value: string): Promise<NFTS
     }
 
     try {
-        response = await fetch(`https://base-mainnet.g.alchemy.com/nft/v3/${API_KEY}/getNFTsForOwner?owner=${user_address}&contractAddresses[]=${contract_address}&withMetadata=true&pageSize=100`, options);
+        response = await fetch(`https://base-mainnet.g.alchemy.com/nft/v3/${ALCHEMY_API_KEY}/getNFTsForOwner?owner=${user_address}&contractAddresses[]=${contract_address}&withMetadata=true&pageSize=100`, options);
         response = await response.json();
 
     } catch (error) {
@@ -35,7 +35,7 @@ async function getNFTs(user_address: string, button_value: string): Promise<NFTS
     if (response != undefined) {
         if (response.totalCount === 0) {
             nfts = {
-                sucess: false,
+                sucess: true,
                 total_count: 0,
                 nfts: []
             }

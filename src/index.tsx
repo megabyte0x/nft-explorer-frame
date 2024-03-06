@@ -1,60 +1,42 @@
-import { serveStatic } from '@hono/node-server/serve-static'
 import { Button, Frog } from 'frog'
-import { neynar } from 'frog/hubs'
+import { neynar as neynarHub } from 'frog/hubs'
+import { type NeynarVariables, neynar } from "frog/middlewares";
 import { getData } from './helpers'
-import { DATA, State } from './helpers/types'
+import { DATA, EVM_ADDRESSES, State } from './helpers/types'
 import { handle } from 'frog/vercel'
+import { NEYNAR_API_KEY, FROG_SECRET } from './helpers/constants';
 
-
-export const app = new Frog<State>({
+export const app = new Frog<{ State: State, Variables: NeynarVariables }>({
   basePath: '/nft-explorer',
+  headers: {
+    'Cache-Control': 'max-age=0'
+  },
   initialState: {
     count: 0,
-    nfts: []
+    data: {
+      sucess: false,
+      total_count: 0,
+      nfts: [],
+      collection_link: ''
+    }
   },
-  secret: process.env.FROG_SECRET,
-  // hubApiUrl: 'https://api.hub.wevm.dev'
-  hub: neynar({ apiKey: process.env.NEYNAR_API_KEY ? process.env.NEYNAR_API_KEY : '' })
+  secret: FROG_SECRET,
+  hub: neynarHub({
+    apiKey:
+      NEYNAR_API_KEY
+  })
 })
-let data: DATA;
 
-app.use('/*', serveStatic({ root: './public' }))
+app.use(
+  neynar({
+    apiKey:
+      NEYNAR_API_KEY, features: ['interactor']
+  })
+);
 
 app.frame('/', async (c) => {
-
   return c.res({
-    image: (
-      <div
-        style={{
-          alignItems: 'center',
-          background:
-            'linear-gradient(to right, #432889, #17101F)',
-          backgroundSize: '100% 100%',
-          display: 'flex',
-          flexDirection: 'column',
-          flexWrap: 'nowrap',
-          height: '100%',
-          justifyContent: 'center',
-          textAlign: 'center',
-          width: '100%',
-        }}
-      >
-        <div
-          style={{
-            color: 'white',
-            fontSize: 60,
-            fontStyle: 'normal',
-            letterSpacing: '-0.025em',
-            lineHeight: 1.4,
-            marginTop: 30,
-            padding: '0 120px',
-            whiteSpace: 'pre-wrap',
-          }}
-        >
-          Explore your favourite NFTs
-        </div>
-      </div>
-    ),
+    image: 'https://i.ibb.co/RNs4mwV/1.png',
     intents: [
       <Button value="outcast" action='/collection/outcast'>Outcast</Button>,
       <Button value="morpheus" action='/collection/morpheus'>Morpheus</Button>,
@@ -64,22 +46,31 @@ app.frame('/', async (c) => {
 })
 
 app.frame('/collection/:collection_name', async (c) => {
-  const { frameData, buttonValue, deriveState } = c
+  const { buttonValue, deriveState, status } = c;
+  const { interactor } = c.var;
+  let evm_addresses: EVM_ADDRESSES;
+  let data: DATA = c.previousState.data;
   const { collection_name } = c.req.param();
-
-  if (frameData) {
-    const { fid } = frameData;
-    data = await getData(collection_name, fid);
-  } else {
-    data = {
-      sucess: false,
-      total_count: 0,
-      nfts: [],
-      collection_link: ''
+  console.log("BUtoon value", buttonValue)
+  if (status == 'response' && (buttonValue === 'outcast' || buttonValue === 'morpheus' || buttonValue === 'podcats')) {
+    if (interactor) {
+      evm_addresses = interactor.verifiedAddresses.ethAddresses;
+      // data = await getData(collection_name, ['0xF005Bc919B57DC1a95070A614C0d51A2897d11ff']);
+      data = await getData(collection_name, evm_addresses);
+      console.log("The data is", data)
+    } else {
+      data = {
+        sucess: false,
+        total_count: 0,
+        nfts: [],
+        collection_link: ''
+      }
     }
+    deriveState(previousState => {
+      previousState.data = data;
+      console.log("The previous state is", previousState.data)
+    });
   }
-
-
 
   if (data && data.sucess) {
     const state = deriveState(previousState => {
@@ -90,38 +81,7 @@ app.frame('/collection/:collection_name', async (c) => {
     const collection_link = data.collection_link;
     if (data.total_count == 0) {
       return c.res({
-        image: (
-          <div
-            style={{
-              alignItems: 'center',
-              background:
-                'black',
-              backgroundSize: '100% 100%',
-              display: 'flex',
-              flexDirection: 'column',
-              flexWrap: 'nowrap',
-              height: '100%',
-              justifyContent: 'center',
-              textAlign: 'center',
-              width: '100%',
-            }}
-          >
-            <div
-              style={{
-                color: 'white',
-                fontSize: 60,
-                fontStyle: 'normal',
-                letterSpacing: '-0.025em',
-                lineHeight: 1.4,
-                marginTop: 30,
-                padding: '0 120px',
-                whiteSpace: 'pre-wrap',
-              }}
-            >
-              You don't own any NFTs from this collection
-            </div>
-          </div>
-        ),
+        image: 'https://i.ibb.co/88L205q/2.png',
         intents: [
           <Button.Link href
             ={collection_link}> Check Collection</Button.Link>,
@@ -153,11 +113,7 @@ app.frame('/collection/:collection_name', async (c) => {
     }
   } else {
     return c.res({
-      image: (
-        <div>
-          An error occured, please report to @megabyte
-        </div>
-      ),
+      image: 'https://i.ibb.co/V2qQ3qN/3.png',
       intents: [
         <Button.Reset>Reset</Button.Reset>
       ]
