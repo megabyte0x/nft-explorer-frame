@@ -1,0 +1,20 @@
+{
+  "name": "aarc-frame",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "frog dev",
+    "build": "frog vercel-build",
+    "deploy": "vercel"
+  },
+  "dependencies": {
+    "@hono/node-server": "latest",
+    "@ngrok/ngrok": "^1.1.0",
+    "frog": "latest",
+    "hono": "^4"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "vercel": "^33.5.3"
+  }
+}
