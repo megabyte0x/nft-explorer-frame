@@ -1,21 +1,22 @@
 {
-  "name": "aarc-frame",
+  "name": "nft-explorer-frame",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "frog dev",
-    "build": "frog vercel-build",
-    "deploy": "vercel"
+    "wrangler:dev": "wrangler dev src/index.tsx",
+    "wrangler:deploy": "wrangler deploy --minify src/index.tsx --compatibility-date 2024-03-07 --name nft-explorer-frame"
   },
   "dependencies": {
     "@hono/node-server": "latest",
     "@ngrok/ngrok": "^1.1.0",
     "dotenv": "^16.4.5",
-    "frog": "latest",
+    "frog": "^0.4.7",
     "hono": "^4"
   },
   "devDependencies": {
     "typescript": "latest",
-    "vercel": "^33.5.3"
+    "vercel": "^33.5.3",
+    "wrangler": "^3.31.0"
   }
 }

@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
 
 export enum NFT_CONTRACT {
     OUTCAST = "0x73682A7f47Cb707C52cb38192dBB9266D3220315",
@@ -13,6 +11,6 @@ export enum COLLECTION_LINK {
     PODCATS = "https://highlight.xyz/mint/65e2062678c1914e513310ce",
 }
 
-export const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY ? process.env.NEYNAR_API_KEY : '';
-export const FROG_SECRET = process.env.FROG_SECRET ? process.env.FROG_SECRET : '';
-export const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY ? process.env.ALCHEMY_API_KEY : '';
+export const NEYNAR_API_KEY = "D61F7E32-7889-4EDC-8E06-8FD42D6A7016";
+export const FROG_SECRET = "1zN3Uvl5QQd7OprLfp83IU96W6ip6KNPQ+l0MECPIZh8FBLYKQ+mPXE1CTxfwXGz";
+export const ALCHEMY_API_KEY = "rT42kYaD8GMdp4lxU4atPiCqA9GJro-q";

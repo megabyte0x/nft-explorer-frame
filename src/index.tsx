@@ -2,7 +2,6 @@ import { Button, Frog } from 'frog'
 import { type NeynarVariables, neynar } from "frog/middlewares";
 import { getData } from './helpers'
 import { DATA, EVM_ADDRESSES, State } from './helpers/types'
-import { handle } from 'frog/vercel'
 import { NEYNAR_API_KEY, FROG_SECRET } from './helpers/constants';
 
 export const app = new Frog<{ State: State, Variables: NeynarVariables }>({
@@ -89,6 +88,7 @@ app.frame('/collection/:collection_name', async (c) => {
         intents: [
           <Button.Link href
             ={collection_link}> Check Collection</Button.Link>,
+          // @ts-ignore
           <Button.Reset>Reset</Button.Reset>
         ]
       })
@@ -98,6 +98,7 @@ app.frame('/collection/:collection_name', async (c) => {
         image: data.nfts[state.count],
         imageAspectRatio: '1:1',
         intents: [
+          // @ts-ignore
           <Button.Reset>Reset</Button.Reset>,
           state.count == data.total_count - 1 ? <Button.Link href
             ={collection_link} > Check Collection</Button.Link > : <Button value="next">Next</Button>,
@@ -109,6 +110,7 @@ app.frame('/collection/:collection_name', async (c) => {
         imageAspectRatio: '1:1',
         intents: [
           <Button value="previous">Previous</Button>,
+          // @ts-ignore
           <Button.Reset>Reset</Button.Reset>,
           state.count == data.total_count - 1 ? <Button.Link href
             ={collection_link} > Check Collection</Button.Link > : <Button value="next">Next</Button>,
@@ -119,11 +121,11 @@ app.frame('/collection/:collection_name', async (c) => {
     return c.res({
       image: 'https://i.ibb.co/V2qQ3qN/3.png',
       intents: [
+        // @ts-ignore
         <Button.Reset>Reset</Button.Reset>
       ]
     })
   }
 });
 
-export const GET = handle(app)
-export const POST = handle(app)
+export default app;
