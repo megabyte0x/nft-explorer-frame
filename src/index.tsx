@@ -1,5 +1,4 @@
 import { Button, Frog } from 'frog'
-import { neynar as neynarHub } from 'frog/hubs'
 import { type NeynarVariables, neynar } from "frog/middlewares";
 import { getData } from './helpers'
 import { DATA, EVM_ADDRESSES, State } from './helpers/types'
@@ -21,10 +20,14 @@ export const app = new Frog<{ State: State, Variables: NeynarVariables }>({
     }
   },
   secret: FROG_SECRET,
-  hub: neynarHub({
-    apiKey:
-      NEYNAR_API_KEY
-  })
+  hub: {
+    apiUrl: "https://hubs.airstack.xyz",
+    fetchOptions: {
+      headers: {
+        "x-airstack-hubs": "1d3e639d822ec46c5be101be9d8699f46",
+      }
+    }
+  }
 })
 
 app.use(
