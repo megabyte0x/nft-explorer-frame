@@ -6,7 +6,8 @@ import { handle } from 'frog/vercel'
 import { NEYNAR_API_KEY, FROG_SECRET } from './helpers/constants';
 
 export const app = new Frog<{ State: State, Variables: NeynarVariables }>({
-  basePath: '/nft-explorer',
+  assetsPath: '/',
+  basePath: '/api',
   headers: {
     'Cache-Control': 'max-age=0'
   },
