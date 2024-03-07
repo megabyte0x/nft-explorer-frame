@@ -38,7 +38,7 @@ app.use(
   })
 );
 
-app.frame('/', async (c) => {
+app.frame('/', (c) => {
   return c.res({
     image: 'https://i.ibb.co/RNs4mwV/1.png',
     intents: [
