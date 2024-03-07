@@ -3,7 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "frog vercel-build",
     "dev": "frog dev",
+    "deploy": "vercel",
     "wrangler:dev": "wrangler dev src/index.tsx",
     "wrangler:deploy": "wrangler deploy --minify src/index.tsx --compatibility-date 2024-03-07 --name nft-explorer-frame"
   },
