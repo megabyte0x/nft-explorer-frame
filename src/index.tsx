@@ -39,7 +39,7 @@ app.use(
 
 app.frame('/', (c) => {
   return c.res({
-    image: 'https://i.ibb.co/RNs4mwV/1.png',
+    image: 'https://gold-chemical-cuckoo-308.mypinata.cloud/ipfs/QmYa2934UuLkpTEDQvp5mGmbvp5DAK9mgrTBSUhsSvYrr3/1.png',
     intents: [
       <Button value="outcast" action='/collection/outcast'>Outcast</Button>,
       <Button value="morpheus" action='/collection/morpheus'>Morpheus</Button>,
@@ -84,7 +84,7 @@ app.frame('/collection/:collection_name', async (c) => {
     const collection_link = data.collection_link;
     if (data.total_count == 0) {
       return c.res({
-        image: 'https://i.ibb.co/88L205q/2.png',
+        image: 'https://gold-chemical-cuckoo-308.mypinata.cloud/ipfs/QmYa2934UuLkpTEDQvp5mGmbvp5DAK9mgrTBSUhsSvYrr3/2.png',
         intents: [
           <Button.Link href
             ={collection_link}> Check Collection</Button.Link>,
@@ -119,7 +119,7 @@ app.frame('/collection/:collection_name', async (c) => {
     }
   } else {
     return c.res({
-      image: 'https://i.ibb.co/V2qQ3qN/3.png',
+      image: 'https://gold-chemical-cuckoo-308.mypinata.cloud/ipfs/QmYa2934UuLkpTEDQvp5mGmbvp5DAK9mgrTBSUhsSvYrr3/3.png',
       intents: [
         // @ts-ignore
         <Button.Reset>Reset</Button.Reset>
